@@ -1,140 +1,144 @@
 <div align="center">
-🏛️ SiReRu
 
-Sistem Reservasi Ruangan
+# 🏛️ SiReRu
+### Sistem Reservasi Ruangan
 
 Aplikasi web berbasis Laravel untuk manajemen reservasi ruangan kampus — dari pengajuan oleh mahasiswa hingga persetujuan oleh admin, semua dalam satu platform.
 
 <br>
-Kelompok 7 · Rekayasa Perangkat Lunak
 
-NamaNIMAisma Haidy Putri Berry Ani Nur Rizeki20241320001Adrian Ronald Daga20241320011Arya Adi Muhammad Iqbal20241320018Nayla Rabia Gustari20241320034Fakhry Ahmad Fauzan20241320038
+**Kelompok 7 · Rekayasa Perangkat Lunak**
+
+| Nama | NIM |
+|------|-----|
+| Aisma Haidy Putri Berry Ani Nur Rizeki | 20241320001 |
+| Adrian Ronald Daga | 20241320011 |
+| Arya Adi Muhammad Iqbal | 20241320018 |
+| Nayla Rabia Gustari | 20241320034 |
+| Fakhry Ahmad Fauzan | 20241320038 |
 
 </div>
 
-Fitur Utama
+---
 
-Role Admin
+## Fitur Utama
 
+**Role Admin**
+- Dashboard statistik reservasi & ruangan
+- Kelola data ruangan (tambah, edit, hapus)
+- Setujui atau tolak permintaan reservasi
+- Manajemen akun pengguna (aktif/nonaktif)
+- Laporan & ekspor data reservasi
+- Notifikasi permintaan masuk
 
-Dashboard statistik reservasi & ruangan
-Kelola data ruangan (tambah, edit, hapus)
-Setujui atau tolak permintaan reservasi
-Manajemen akun pengguna (aktif/nonaktif)
-Laporan & ekspor data reservasi
-Notifikasi permintaan masuk
+**Role Mahasiswa**
+- Cari & lihat ketersediaan ruangan
+- Buat reservasi dengan detail waktu dan keperluan
+- Pantau riwayat & status reservasi
+- Terima notifikasi hasil pengajuan
 
+---
 
-Role Mahasiswa
+## Tech Stack
 
+- **Backend** — Laravel 11 + PHP
+- **Database** — MySQL
+- **Frontend** — Blade Templates + CSS kustom (`sireru.css`)
+- **Auth** — Laravel built-in + Role Middleware
 
-Cari & lihat ketersediaan ruangan
-Buat reservasi dengan detail waktu dan keperluan
-Pantau riwayat & status reservasi
-Terima notifikasi hasil pengajuan
+---
 
+## Instalasi
 
+### Prasyarat
+- PHP ≥ 8.2
+- Composer
+- MySQL
+- Node.js (opsional, untuk Vite)
 
-Tech Stack
+### Langkah-langkah
 
-
-Backend — Laravel 11 + PHP
-Database — MySQL
-Frontend — Blade Templates + CSS kustom (sireru.css)
-Auth — Laravel built-in + Role Middleware
-
-
-
-Instalasi
-
-Prasyarat
-
-
-PHP ≥ 8.2
-Composer
-MySQL
-Node.js (opsional, untuk Vite)
-
-
-Langkah-langkah
-
-1. Clone repository
-
-bashgit clone https://github.com/NoahMikhailovna/Kelompok-7-SIRERU.git
+**1. Clone repository**
+```bash
+git clone https://github.com/NoahMikhailovna/Kelompok-7-SIRERU.git
 cd Kelompok-7-SIRERU
+```
 
-2. Install dependensi
+**2. Install dependensi**
+```bash
+composer install
+```
 
-bashcomposer install
-
-3. Konfigurasi environment
-
-bashcp .env.example .env
+**3. Konfigurasi environment**
+```bash
+cp .env.example .env
 php artisan key:generate
+```
 
-Edit file .env, sesuaikan bagian database:
-
-envDB_DATABASE=sireru
+Edit file `.env`, sesuaikan bagian database:
+```env
+DB_DATABASE=sireru
 DB_USERNAME=root
 DB_PASSWORD=
+```
 
-4. Daftarkan Middleware
+**4. Daftarkan Middleware**
 
-
-Laravel 11 — edit bootstrap/app.php:
-
-
-
-php->withMiddleware(function (Middleware $middleware) {
+> **Laravel 11** — edit `bootstrap/app.php`:
+```php
+->withMiddleware(function (Middleware $middleware) {
     $middleware->alias([
         'role' => \App\Http\Middleware\RoleMiddleware::class,
     ]);
 })
+```
 
+> **Laravel 10** — edit `app/Http/Kernel.php` di bagian `$routeMiddleware`:
+```php
+'role' => \App\Http\Middleware\RoleMiddleware::class,
+```
 
-Laravel 10 — edit app/Http/Kernel.php di bagian $routeMiddleware:
+**5. Daftarkan ViewServiceProvider**
 
-
-
-php'role' => \App\Http\Middleware\RoleMiddleware::class,
-
-5. Daftarkan ViewServiceProvider
-
-
-Laravel 11 — edit bootstrap/providers.php:
-
-
-
-phpreturn [
+> **Laravel 11** — edit `bootstrap/providers.php`:
+```php
+return [
     App\Providers\AppServiceProvider::class,
     App\Providers\ViewServiceProvider::class, // ← tambahkan
 ];
+```
 
+> **Laravel 10** — edit `config/app.php` di bagian `providers`:
+```php
+App\Providers\ViewServiceProvider::class,
+```
 
-Laravel 10 — edit config/app.php di bagian providers:
+**6. Migrasi & seed database**
+```bash
+php artisan migrate:fresh --seed
+```
 
+**7. Jalankan server**
+```bash
+php artisan serve
+```
 
+Buka di browser: [http://localhost:8000](http://localhost:8000)
 
-phpApp\Providers\ViewServiceProvider::class,
+---
 
-6. Migrasi & seed database
+## Akun Demo
 
-bashphp artisan migrate:fresh --seed
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@sireru.id | admin123 |
+| Mahasiswa | budi@student.sireru.id | user123 |
 
-7. Jalankan server
+---
 
-bashphp artisan serve
+## Struktur Proyek
 
-Buka di browser: http://localhost:8000
-
-
-Akun Demo
-
-RoleEmailPasswordAdminadmin@sireru.idadmin123Mahasiswabudi@student.sireru.iduser123
-
-
-Struktur Proyek
-
+```
 app/
 ├── Http/
 │   ├── Controllers/
@@ -182,18 +186,19 @@ resources/views/
 
 routes/
 └── web.php                            # Semua route web
+```
 
+---
 
-Cara Merge ke Project Laravel yang Sudah Ada
+## Cara Merge ke Project Laravel yang Sudah Ada
 
 Jika ingin mengintegrasikan kode ini ke project Laravel yang sudah berjalan:
 
+1. **Copy semua isi folder** ini ke dalam project Laravel kamu
+2. **Merge** dengan struktur yang sudah ada (jangan timpa file yang tidak berkaitan)
+3. Ikuti **Langkah 4–6** di atas (middleware, provider, migrate & seed)
 
-Copy semua isi folder ini ke dalam project Laravel kamu
-Merge dengan struktur yang sudah ada (jangan timpa file yang tidak berkaitan)
-Ikuti Langkah 4–6 di atas (middleware, provider, migrate & seed)
-
-
+---
 
 <div align="center">
   <sub>Dibuat dengan ❤️ oleh Kelompok 7</sub>
